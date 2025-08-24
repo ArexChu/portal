@@ -23,7 +23,7 @@ export default defineConfig({
       resolvers: [NaiveUiResolver()],
     }),
     visualizer() as PluginOption,
-    ManifestBasePlugin(),
+    ManifestBasePlugin('/portal/'),
   ],
   resolve: {
     alias: {
