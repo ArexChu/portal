@@ -12,7 +12,7 @@ CGO_ENABLED := 0
 endif
 
 RELEASE_ROOT = release
-RELEASE_FILES = LICENSE README.md CHANGELOG.md config.yaml.sample docker-compose.yaml scripts docs
+RELEASE_FILES = config.yaml.sample docker-compose.yaml scripts
 RELEASE_LINUX_AMD64 = $(RELEASE_ROOT)/linux-amd64/$(PROJECT)
 RELEASE_LINUX_ARM64 = $(RELEASE_ROOT)/linux-arm64/$(PROJECT)
 RELEASE_DARWIN_AMD64 = $(RELEASE_ROOT)/darwin-amd64/$(PROJECT)
