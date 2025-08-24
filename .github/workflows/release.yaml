@@ -29,11 +29,11 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: paopao-release
-          path: release/*.zip
+          path: release/linux-arm64/*.zip
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: release/*.zip
+          files: release/linux-arm64/*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
