@@ -61,6 +61,12 @@ release: linux-amd64 linux-arm64 darwin-amd64 darwin-arm64 windows-x64
 	@cd $(RELEASE_DARWIN_ARM64)/.. && rm -f *.zip && zip -r $(PROJECT)-darwin_arm64.zip $(PROJECT) && cd -
 	@cd $(RELEASE_WINDOWS_AMD64)/.. && rm -f *.zip && zip -r $(PROJECT)-windows_amd64.zip $(PROJECT) && cd -
 
+.PHONY: release-linux-arm64
+release-linux-arm64: linux-arm64
+	@echo Package paopao-ce [linux-arm64]
+	@cp -rf $(RELEASE_FILES) $(RELEASE_LINUX_ARM64)
+	@cd $(RELEASE_LINUX_ARM64)/.. && rm -f *.zip && zip -r $(PROJECT)-linux_arm64.zip $(PROJECT) && cd -
+
 .PHONY: linux-amd64
 linux-amd64:
 	@echo Build paopao-ce [linux-amd64] CGO_ENABLED=$(CGO_ENABLED) TAGS="'$(TAGS)'"
