@@ -8,7 +8,7 @@ endif
 TARGET_BIN = $(basename $(TARGET))
 
 ifeq (n$(CGO_ENABLED),n)
-CGO_ENABLED := 1
+CGO_ENABLED := 0
 endif
 
 RELEASE_ROOT = release
