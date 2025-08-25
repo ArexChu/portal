@@ -5,10 +5,6 @@ import Components from 'unplugin-vue-components/vite';
 
 import { visualizer } from 'rollup-plugin-visualizer';
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
-
-import { ManifestBasePlugin } from './vite-plugin-manifest-base';
-import path from 'path';
-
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '/portal/',
@@ -23,7 +19,6 @@ export default defineConfig({
       resolvers: [NaiveUiResolver()],
     }),
     visualizer() as PluginOption,
-    ManifestBasePlugin(),
   ],
   resolve: {
     alias: {
