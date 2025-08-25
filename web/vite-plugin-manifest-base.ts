@@ -2,37 +2,24 @@ import { Plugin } from 'vite';
 import fs from 'fs';
 import path from 'path';
 
-export function ManifestBasePlugin(base: string): Plugin {
+export function ManifestBasePlugin(): Plugin {
   return {
     name: 'vite-plugin-manifest-base',
     apply: 'build',
-    closeBundle() {
-      const distManifest = path.resolve(__dirname, 'dist/manifest.json');
-      if (!fs.existsSync(distManifest)) {
-        console.warn(`[ManifestBasePlugin] dist/manifest.json not found`);
-        return;
+    closeBundle: () => {
+      const manifestPath = path.resolve(__dirname, 'public/manifest.json'); // 根据你的 manifest.json 路径修改
+      if (fs.existsSync(manifestPath)) {
+        const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
+        // 使用 VITE_BASE 或者从 vite.config.ts 获取 base
+        const base = process.env.BASE_URL || '/';
+
+        // 替换 start_url 和 scope
+        manifest.start_url = base;
+        manifest.scope = base;
+
+        fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), 'utf-8');
+        console.log(`[ManifestBasePlugin] Updated start_url and scope to "${base}"`);
       }
-
-      const manifest = JSON.parse(fs.readFileSync(distManifest, 'utf-8'));
-
-      // 修改 start_url 和 scope
-      manifest.start_url = base;
-      manifest.scope = base;
-
-      // 修改 icons 路径，确保加上 base 前缀
-      if (manifest.icons && Array.isArray(manifest.icons)) {
-        manifest.icons = manifest.icons.map((icon: any) => {
-          let src = icon.src;
-          // 去掉开头 /
-          src = src.replace(/^\/+/, '');
-          // 加上 base 前缀
-          icon.src = base + src;
-          return icon;
-        });
-      }
-
-      fs.writeFileSync(distManifest, JSON.stringify(manifest, null, 2), 'utf-8');
-      console.log(`[ManifestBasePlugin] manifest.json updated with base "${base}"`);
-    },
+    }
   };
 }
