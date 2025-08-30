@@ -15,6 +15,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+          registry-url: 'https://registry.npmjs.org/'
 
       - name: Change directory
         run: cd web
@@ -34,16 +35,24 @@ jobs:
           cd web
           yarn build
 
-      - name: Replace assets paths
-        run: |
-          cd web/dist
-          sed -i 's|src="/|src="https://unpkg.com/portalbbs@1.0.2/|g' index.html
-          sed -i 's|href="/|href="https://unpkg.com/portalbbs@1.0.2/|g' index.html
-          sed -i 's|url(/|url(https://unpkg.com/portalbbs@1.0.2/|g' index.html
-
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./web/dist
           cname: bbs.portalapi.site
+
+      - name: Copy package.json
+        run: |
+          cd web
+          cp package.json.dist dist/package.json
+          cd dist
+          rm -f CNAME index.html manifest.json .nojekyll
+
+      - name: Publish to npm
+        run: |
+          cd web/dist
+          npm version patch -m "chore: release %s"
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

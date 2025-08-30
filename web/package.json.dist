@@ -1,0 +1,15 @@
+{
+  "name": "portalbbs",
+  "version": "1.0.0",
+  "description": "portalbbs",
+  "main": "sw.js",
+  "scripts": {
+    "sw": "node sw.js"
+  },
+  "keywords": [
+    "npm",
+    "portalbbs"
+  ],
+  "author": "Arex",
+  "license": "MIT"
+}
