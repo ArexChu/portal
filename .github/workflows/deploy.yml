@@ -17,8 +17,10 @@ jobs:
           node-version: 18
           registry-url: 'https://registry.npmjs.org/'
 
-      - name: Change directory
-        run: cd web
+      - name: Install helpers
+        run: |
+          sudo apt-get update && sudo apt-get install -y jq
+          npm install -g semver
 
       - name: Install dependencies
         run: |
@@ -45,14 +47,24 @@ jobs:
       - name: Copy package.json
         run: |
           cd web
-          cp package.json.dist dist/package.json
+          cp package.json.dist dist/
           cd dist
           rm -f CNAME index.html manifest.json .nojekyll
 
       - name: Publish to npm
         run: |
           cd web/dist
-          npm version patch -m "chore: release %s"
+          LATEST_VERSION=$(npm view portalbbs version || echo "1.0.0")
+          echo "Latest version on npm: $LATEST_VERSION"
+
+          NEW_VERSION=$(semver -i patch "$LATEST_VERSION")
+          echo "Next version: $NEW_VERSION"
+
+          jq --arg v "$NEW_VERSION" '.version=$v' package.json.dist > package.json
+
+          echo "package.json after bump:"
+          cat package.json
+
           npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
