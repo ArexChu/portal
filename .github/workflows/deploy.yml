@@ -27,6 +27,18 @@ jobs:
           cd web
           yarn install --frozen-lockfile
 
+      - name: Update version and replace vite.config.ts
+        run: |
+          cd web
+          LATEST_VERSION=$(npm view portalbbs version || echo "0.0.0")
+          echo "Latest version on npm: $LATEST_VERSION"
+
+          NEW_VERSION=$(semver -i patch "$LATEST_VERSION")
+          echo "Next version: $NEW_VERSION"
+
+          sed -i "s#https://unpkg.com/portalbbs@.*#/https://unpkg.com/portalbbs@${NEW_VERSION}/#g" vite.config.ts
+          grep "base:" vite.config.ts
+
       - name: Copy env
         run: |
           cd web
@@ -42,7 +54,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./web/dist
-          cname: bbs.portalapi.site
 
       - name: Copy package.json
         run: |

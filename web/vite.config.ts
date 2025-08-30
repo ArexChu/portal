@@ -7,7 +7,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "https://unpkg.com/portalbbs@latest/",
+  base: "https://unpkg.com/portalbbs@1.0.0/",
   server: {
     host: '0.0.0.0',
   },
